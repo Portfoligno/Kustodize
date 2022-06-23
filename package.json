@@ -15,17 +15,17 @@
   },
   "dependencies": {
     "@caporal/core": "^2.0.2",
-    "@types/twig": "^1.12.5",
-    "ignore": "^4.0.6",
-    "streaming-iterables": "^5.0.3",
+    "@types/twig": "^1.12.9",
+    "ignore": "^5.2.0",
+    "streaming-iterables": "^7.0.4",
     "twig": "^1.15.4",
-    "yaml": "^1.10.0"
+    "yaml": "^2.1.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.12.0",
-    "@typescript-eslint/parser": "^4.12.0",
-    "eslint": "^7.17.0",
-    "typescript": "^4.1.3"
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "eslint": "^8.18.0",
+    "typescript": "^4.7.4"
   },
   "author": "Nicholas Yip <nicholasyip@obceit.cc>",
   "license": "Apache-2.0",
