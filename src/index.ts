@@ -105,10 +105,11 @@ export async function generate(path: string) {
   return resolve(buildDirectory, relative(projectRoot, path))
 }
 
-export async function build(path: string) {
-  const [command, subcommand] = await commandExists('kustomize')
+export async function build(path: string, useKubectl: boolean) {
+  const kubectl = ['kubectl', 'kustomize']
+  const [command, subcommand] = useKubectl ? kubectl : await commandExists('kustomize')
     .then(() => ['kustomize', 'build'])
-    .catch(() => ['kubectl', 'kustomize'])
+    .catch(() => kubectl)
 
   await execute(command, [subcommand, await generate(path)], 'inherit', 'inherit')
 }
