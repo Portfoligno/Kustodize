@@ -1,5 +1,5 @@
-[![Build Status](https://circleci.com/gh/sd-yip/Kustodize/tree/master.svg?style=shield)](
-  https://circleci.com/gh/sd-yip/Kustodize
+[![Build Status](https://circleci.com/gh/Portfoligno/Kustodize/tree/master.svg?style=shield)](
+  https://circleci.com/gh/Portfoligno/Kustodize
 )
 [![npm version](https://badge.fury.io/js/kustodize.svg)](
   https://badge.fury.io/js/kustodize
