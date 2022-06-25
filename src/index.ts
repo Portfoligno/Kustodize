@@ -48,15 +48,18 @@ async function* parents(path: string, root: string = parse(resolve(path)).root):
   }
 }
 
-const execute = (command: string, parameters: string[], stdout: 'ignore' | 'inherit') =>
+const execute = (command: string, parameters: string[], stdout: 'ignore' | 'inherit', stderr: 'ignore' | 'inherit') =>
   new Promise((resolve, reject) => {
-    const childProcess = spawn(command, parameters, { stdio: ['ignore', stdout, 'inherit'] })
+    const childProcess = spawn(command, parameters, { stdio: ['ignore', stdout, stderr] })
 
     childProcess.on('exit', code =>
       code === 0 ? resolve(null) : reject(`Execution of '${command}' failed.`)
     )
     childProcess.on('error', reject)
   })
+
+const commandExists = (command: string) =>
+  execute('command', ['-v', command], 'ignore', 'ignore')
 
 const randomString = () => randomBytes(18)
   .toString('base64')
@@ -88,7 +91,9 @@ export async function generate(path: string) {
       if (process.env['ANSIBLE_VAULT_PASSWORD_FILE'] === undefined) {
         throw "Environment variable 'ANSIBLE_VAULT_PASSWORD_FILE' is not set."
       }
-      await execute('ansible-vault', ['decrypt', p, '--output', output], 'ignore').catch(() =>
+      const commandArguments = ['decrypt', p, '--output', output]
+
+      await execute('ansible-vault', commandArguments, 'ignore', 'inherit').catch(() =>
         fs.unlink(output).catch(() => null) // Delete potential leftover
       )
     } else {
@@ -101,7 +106,11 @@ export async function generate(path: string) {
 }
 
 export async function build(path: string) {
-  await execute('kubectl', ['kustomize', await generate(path)], 'inherit')
+  const [command, subcommand] = await commandExists('kustomize')
+    .then(() => ['kustomize', 'build'])
+    .catch(() => ['kubectl', 'kustomize'])
+
+  await execute(command, [subcommand, await generate(path)], 'inherit', 'inherit')
 }
 
 export let lastUnsafeAction: string | undefined
