@@ -15,7 +15,7 @@ commands:
 jobs:
   publish:
     docker:
-      - image: justincasetech/node:12.15.0-npm
+      - image: node:18.4.0-alpine@sha256:a27df330224bb16312064cc8653793d7438129c8ec6699ae523eb5baaa7f5fb4
     steps:
       - run: |
           apk add --no-cache git openssh-client
