@@ -3,6 +3,8 @@ version: 2.1
 commands:
   ci:
     steps:
+      - run: |
+          apk add --no-cache git openssh-client
       - checkout
       - restore_cache:
           key: npm-h77RWG-{{ checksum "package-lock.json" }}
@@ -13,16 +15,21 @@ commands:
           key: npm-h77RWG-{{ checksum "package-lock.json" }}
 
 jobs:
+  build:
+    docker:
+      - image: node:18.4.0-alpine@sha256:a27df330224bb16312064cc8653793d7438129c8ec6699ae523eb5baaa7f5fb4
+    steps:
+      - ci
+      - run: |
+          npm run build
   publish:
     docker:
       - image: node:18.4.0-alpine@sha256:a27df330224bb16312064cc8653793d7438129c8ec6699ae523eb5baaa7f5fb4
     steps:
-      - run: |
-          apk add --no-cache git openssh-client
       - ci
       - run: |
-          test "$(node -p 'require("./package-lock.json").version')" = "$CIRCLE_TAG"
-          test "$(node -p 'require("./package.json").version')" = "$CIRCLE_TAG"
+          [ "$(node -p 'require("./package-lock.json").version')" = "$CIRCLE_TAG" ]
+          [ "$(node -p 'require("./package.json").version')" = "$CIRCLE_TAG" ]
           npm run build
           echo //registry.npmjs.org/:_authToken="$NPM_TOKEN" >>.npmrc
           npm publish
@@ -33,6 +40,7 @@ workflows:
 
   unspecific:
     jobs:
+      - build
       - publish:
           context: npm-publish
           filters: { branches: { only: /x^/ }, tags: { only: /.*/ } }

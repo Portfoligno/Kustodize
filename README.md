@@ -1,4 +1,4 @@
-[![Build Status](https://circleci.com/gh/Portfoligno/Kustodize/tree/master.svg?style=shield)](
+[![Build Status](https://circleci.com/gh/Portfoligno/Kustodize/tree/main.svg?style=shield)](
   https://circleci.com/gh/Portfoligno/Kustodize
 )
 [![npm version](https://badge.fury.io/js/kustodize.svg)](
